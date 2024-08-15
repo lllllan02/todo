@@ -4,47 +4,51 @@ Copyright © 2024 lllllan
 package cmd
 
 import (
+	"time"
+
 	"github.com/AlecAivazis/survey/v2"
 	"github.com/lllllan02/todo/todo"
 	"github.com/spf13/cobra"
 )
 
-// addCmd represents the add command
-var addCmd = &cobra.Command{
-	Use:   "add",
-	Short: "A brief description of your command",
-	Long: `A longer description that spans multiple lines and likely contains examples
-and usage of using your command. For example:
+func addCmd() *cobra.Command {
+	return &cobra.Command{
+		Use: "add",
+		Run: func(cmd *cobra.Command, args []string) {
+			task := todo.Task{}
 
-Cobra is a CLI library for Go that empowers applications.
-This application is a tool to generate the needed files
-to quickly create a Cobra application.`,
-	Run: func(cmd *cobra.Command, args []string) {
-		task := todo.Task{}
+			if err := survey.Ask([]*survey.Question{
+				{
+					Name: "Title",
+					Prompt: &survey.Input{
+						Message: "Title",
+						Default: "Unnamed",
+					},
+				},
+				{
+					Name: "Start Time",
+					Prompt: &survey.Input{
+						Message: "StartTime",
+						Default: time.Now().Format(time.DateTime),
+					},
+				},
+				{
+					Name: "Due Date",
+					Prompt: &survey.Input{
+						Message: "DueDate",
+						Default: time.Now().Add(24 * time.Hour).Format(time.DateTime),
+					},
+				},
+			}, &task); err != nil {
+				printE(err.Error())
+				return
+			}
 
-		if err := survey.AskOne(&survey.Input{Message: "Title:"}, &task.Title); err != nil {
-			printE(err.Error())
-			return
-		}
-
-		if err := query.Task.Create(&task); err != nil {
-			printE(err.Error())
-			return
-		}
-		printS("")
-	},
-}
-
-func init() {
-	rootCmd.AddCommand(addCmd)
-
-	// Here you will define your flags and configuration settings.
-
-	// Cobra supports Persistent Flags which will work for this command
-	// and all subcommands, e.g.:
-	// addCmd.PersistentFlags().String("foo", "", "A help for foo")
-
-	// Cobra supports local flags which will only run when this command
-	// is called directly, e.g.:
-	// addCmd.Flags().BoolP("toggle", "t", false, "Help message for toggle")
+			if err := query.Task.Create(&task); err != nil {
+				printE(err.Error())
+				return
+			}
+			printS("")
+		},
+	}
 }

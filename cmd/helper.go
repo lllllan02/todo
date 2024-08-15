@@ -2,17 +2,13 @@ package cmd
 
 import (
 	"github.com/fatih/color"
-)
-
-const (
-	CheckMark = "\u2714"
-	CrossMark = "\u2716"
+	"github.com/lllllan02/todo/utils"
 )
 
 func printE(message string) {
-	color.Red("%s  %s", CrossMark, message)
+	color.Red("%s  %s", utils.CrossMark, message)
 }
 
 func printS(message string) {
-	color.Green("%s  %s", CheckMark, message)
+	color.Green("%s  %s", utils.CheckMark, message)
 }

@@ -4,8 +4,10 @@ go 1.22.6
 
 require (
 	github.com/AlecAivazis/survey/v2 v2.3.7
+	github.com/chzyer/readline v1.5.1
 	github.com/fatih/color v1.17.0
 	github.com/olekukonko/tablewriter v0.0.5
+	github.com/samber/lo v1.47.0
 	github.com/spf13/cast v1.7.0
 	github.com/spf13/cobra v1.8.1
 	gorm.io/driver/sqlite v1.5.6
